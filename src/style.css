@@ -1,0 +1,471 @@
+:root {
+  color-scheme: dark;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #eeeee8;
+  background: #060810;
+  font-synthesis: none;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+button:focus-visible {
+  outline: 2px solid #a3ffea;
+  outline-offset: 4px;
+}
+#app {
+  position: relative;
+  width: min(100vw, calc(100dvh * 420 / 680));
+  height: min(100dvh, calc(100vw * 680 / 420));
+  margin: auto;
+  overflow: hidden;
+  background: #080b17;
+  box-shadow: 0 0 90px #32445e20;
+  touch-action: manipulation;
+  user-select: none;
+}
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  padding: calc(18px + env(safe-area-inset-top)) 22px
+    calc(18px + env(safe-area-inset-bottom));
+  background: linear-gradient(#080c16c9, #080b1788 45%, #080b17f2);
+  transition: opacity 0.2s;
+}
+#overlay:empty {
+  background: none;
+  pointer-events: none;
+}
+.panel {
+  width: 100%;
+  text-align: center;
+  pointer-events: auto;
+  max-height: 100%;
+  overflow: auto;
+  scrollbar-width: thin;
+  touch-action: pan-y;
+  animation: arrive 0.25s ease-out;
+}
+.brand {
+  font-size: 11px;
+  letter-spacing: 0.34em;
+  font-weight: 700;
+  color: #c9c6c0;
+}
+.brand b {
+  color: #a5ffe8;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: #9cebdc;
+  text-transform: uppercase;
+  margin: 15px 0;
+}
+h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(33px, 10vw, 48px);
+  line-height: 0.95;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  margin: 22px 0 12px;
+  text-shadow: 0 0 30px #c8f8e826;
+}
+h1 em {
+  font-style: normal;
+  color: #9cf0e1;
+  letter-spacing: 0.15em;
+  font-size: 0.83em;
+}
+h2 {
+  font:
+    32px Georgia,
+    serif;
+  margin: 12px 0;
+}
+p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #adb7c5;
+  margin: 10px 0;
+}
+.tagline {
+  font:
+    italic 14px/1.6 Georgia,
+    serif;
+  color: #ded8c9;
+}
+.sigil {
+  color: #9cf4e3;
+  font-size: 42px;
+  margin: 10px;
+  text-shadow: 0 0 30px #5affd9;
+}
+.primary,
+.secondary,
+.choice,
+.weapon {
+  display: block;
+  width: 100%;
+  border: 1px solid #708b8c;
+  background: #151e2b;
+  color: #e6f5ed;
+  padding: 14px 12px;
+  margin: 9px 0;
+  min-height: 46px;
+  border-radius: 3px;
+}
+.primary {
+  background: #a1e6d6;
+  color: #0a2527;
+  border-color: #c7ffed;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  box-shadow: 0 5px 28px #77e8cf16;
+}
+.secondary {
+  font-size: 12px;
+  border-color: #455361;
+  background: #111925db;
+}
+.row {
+  display: flex;
+  gap: 8px;
+}
+.row > * {
+  flex: 1;
+}
+.muted {
+  color: #8191a5;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+.weapon {
+  text-align: left;
+  padding: 10px 12px;
+  border-color: #3a4656;
+  background: #111824e8;
+}
+.weapon strong {
+  font:
+    18px Georgia,
+    serif;
+}
+.weapon small {
+  display: block;
+  font-size: 10px;
+  color: #95a7b8;
+  margin-top: 4px;
+}
+.weapon.selected {
+  border-color: #95e7d9;
+  background: #203636;
+}
+.weapon:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.choice {
+  text-align: left;
+  border-color: #6b5d88;
+  background: linear-gradient(120deg, #252035, #101925);
+}
+.choice small {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: #c6a1ef;
+}
+.choice strong {
+  display: block;
+  font:
+    22px Georgia,
+    serif;
+  margin: 6px 0;
+}
+.choice span {
+  font-size: 12px;
+  color: #bcc4d0;
+}
+.statgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 20px 0;
+}
+.statgrid div {
+  padding: 12px;
+  background: #17202bd9;
+  border: 1px solid #354554;
+}
+.statgrid b {
+  display: block;
+  font:
+    25px Georgia,
+    serif;
+  color: #bbf4df;
+}
+.statgrid small {
+  font-size: 9px;
+  color: #9dabbc;
+  letter-spacing: 0.1em;
+}
+#hud {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  left: 18px;
+  right: 18px;
+  pointer-events: none;
+  font-size: 11px;
+}
+.hudtop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.health {
+  height: 5px;
+  background: #51313d;
+  margin-top: 5px;
+  width: 125px;
+}
+.health i {
+  display: block;
+  height: 100%;
+  background: #b6edd3;
+  transition: width 0.15s;
+}
+.hudwave {
+  text-align: center;
+  font-size: 10px;
+  color: #c1bcce;
+  letter-spacing: 0.1em;
+}
+#pause {
+  pointer-events: auto;
+  background: #17212ecc;
+  border: 1px solid #596477;
+  color: #c8e8e0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+}
+.chapter {
+  text-align: center;
+  font:
+    12px Georgia,
+    serif;
+  color: #829da5;
+  margin-top: 8px;
+}
+.bossbar {
+  margin: 10px auto 0;
+  width: 90%;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: #ffb9cc;
+}
+.bossbar > div {
+  height: 5px;
+  background: #39202d;
+  margin-top: 4px;
+}
+.bossbar i {
+  display: block;
+  height: 100%;
+  background: #eb7998;
+}
+#controls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+#stick {
+  position: absolute;
+  bottom: max(28px, env(safe-area-inset-bottom));
+  left: 30px;
+  width: 104px;
+  height: 104px;
+  border: 1px solid #a3d9d838;
+  border-radius: 50%;
+  background: #142b324d;
+  pointer-events: auto;
+  touch-action: none;
+}
+#stick i {
+  position: absolute;
+  left: 32px;
+  top: 32px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #8dcbbd33;
+  border: 1px solid #b8f9e76b;
+}
+#stick span {
+  position: absolute;
+  top: 112px;
+  width: 100%;
+  text-align: center;
+  color: #789a9c;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
+#echo {
+  position: absolute;
+  bottom: max(32px, env(safe-area-inset-bottom));
+  right: 28px;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 1px solid #a6ffed;
+  background: radial-gradient(#376262ee, #132c37ee);
+  color: #d4fff1;
+  box-shadow: 0 0 22px #70f5df20;
+  pointer-events: auto;
+  touch-action: none;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+}
+#echo small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  margin-top: 8px;
+  font-weight: 400;
+}
+#echo.unready {
+  border-color: #576675;
+  color: #8fa9b3;
+  background: #15212de8;
+  box-shadow: none;
+}
+#toast {
+  position: absolute;
+  top: 24%;
+  left: 24px;
+  right: 24px;
+  text-align: center;
+  color: #e0fff3;
+  font:
+    17px/1.4 Georgia,
+    serif;
+  text-shadow: 0 2px 10px #000;
+  pointer-events: none;
+  transition: opacity 0.25s;
+  opacity: 0;
+  background: #111c26cc;
+  padding: 10px;
+  border-top: 1px solid #6cae9f55;
+  border-bottom: 1px solid #6cae9f55;
+}
+#toast.show {
+  opacity: 1;
+}
+.tutorial {
+  position: absolute;
+  top: 17%;
+  left: 20px;
+  right: 20px;
+  text-align: center;
+  background: #121f2be8;
+  border: 1px solid #70988f;
+  padding: 12px;
+  pointer-events: none;
+}
+.tutorial strong {
+  font:
+    18px Georgia,
+    serif;
+  color: #c4ffed;
+}
+.tutorial p {
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.panel .footer {
+  margin-top: 18px;
+  font-size: 9px;
+  color: #83929e;
+  letter-spacing: 0.14em;
+}
+.settings label {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid #33414c;
+  font-size: 13px;
+}
+.settings input {
+  accent-color: #a1e6d6;
+  width: 20px;
+  height: 20px;
+}
+.settings select {
+  background: #1d2935;
+  color: #ecfff6;
+  padding: 5px;
+  border: 1px solid #496173;
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+[hidden] {
+  display: none !important;
+}
+@media (min-aspect-ratio: 1/1) {
+  body {
+    background: radial-gradient(ellipse at center, #182332, #060810 70%);
+  }
+}
+@media (max-height: 650px) {
+  h1 {
+    margin: 10px 0;
+    font-size: 36px;
+  }
+  .sigil {
+    font-size: 26px;
+    margin: 4px;
+  }
+  .weapon {
+    margin: 6px 0;
+    padding: 8px;
+  }
+  .panel .footer {
+    margin-top: 9px;
+  }
+  p {
+    margin: 7px 0;
+  }
+  .eyebrow {
+    margin: 9px 0;
+  }
+}
