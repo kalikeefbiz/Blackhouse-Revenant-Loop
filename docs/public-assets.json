@@ -19,7 +19,7 @@
     "path": "assets/index-BnMnimSq.js",
     "status": 200,
     "mime": "application/javascript",
-    "cache": "public, max-age=0, must-revalidate, public, max-age=31536000, immutable",
+    "cache": "public, max-age=31536000, immutable",
     "sha256": "02180ba46b5c112ebf15ef56f959dd4e40f539b9af8c8bfae99a13cdd091cc2f",
     "matches_local": true
   },
@@ -27,7 +27,7 @@
     "path": "assets/index-Bo4ukIQZ.css",
     "status": 200,
     "mime": "text/css; charset=utf-8",
-    "cache": "public, max-age=0, must-revalidate, public, max-age=31536000, immutable",
+    "cache": "public, max-age=31536000, immutable",
     "sha256": "1e24e677adda9ae610617180544772b7cbc03ae0b7eb5ce2c12f9c37607e1d88",
     "matches_local": true
   }

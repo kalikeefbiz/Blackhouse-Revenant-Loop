@@ -79,7 +79,10 @@ test("upgrade, all arenas and boss victory UI", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "CYCLE BROKEN" }),
   ).toBeVisible();
-  await page.screenshot({ path: "test-results/victory.png" });
+  await page.screenshot({
+    path: "test-results/victory.png",
+    animations: "disabled",
+  });
   await page.getByRole("button", { name: "CHOOSE WEAPON" }).click();
   await expect(page.getByRole("button", { name: /Void Lance/ })).toBeEnabled();
 });
