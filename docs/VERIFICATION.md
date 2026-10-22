@@ -40,7 +40,7 @@ Stationary play with automatic Echo fails for all three weapons in the regressio
 
 A dedicated Cloudflare Pages configuration is in `deploy/pages.json`; relative asset paths are built by default. `_headers` sets HTML revalidation, immutable hashed-asset caching, MIME sniffing protection and referrer policy. No custom domains or existing deployments are modified.
 
-GitHub Pages creation was attempted and rejected with HTTP 403 `Resource not accessible by integration`; Cloudflare is the alternate authorized target. Public deployment and smoke result will be recorded here after verification.
+GitHub Pages creation was attempted and rejected with HTTP 403 `Resource not accessible by integration`; Cloudflare is the alternate authorized target. The dedicated release is live at **https://blackhouse-revenant-loop.pages.dev/**. Cloudflare deployment `42b72e3e-a777-43aa-a5e3-899301d66d9e` succeeded for release commit `77662c7`. Live Chromium and WebKit both passed the production smoke described above. HTML, JS, CSS and favicon return HTTP 200 with correct MIME types and byte-for-byte match the local build. The first header check caught overlapping cache rules; the follow-up narrows HTML revalidation to document paths so hashed assets have a single immutable cache policy. Final header evidence is recorded in `docs/public-assets.json`.
 
 ## Explicit limitations
 

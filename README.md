@@ -2,6 +2,8 @@
 
 **Every five seconds, your past becomes your ally.**
 
+**Play:** https://blackhouse-revenant-loop.pages.dev/
+
 A complete, mobile-first supernatural action roguelite for BlackHouse. Release v1.0.0: playable from tutorial through victory, with original procedural graphics and synthesized sound. No accounts, remote services, downloaded asset packs, or runtime dependencies.
 
 ## Play / develop
