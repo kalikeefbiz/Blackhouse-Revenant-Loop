@@ -69,7 +69,7 @@ function menu() {
   hud.hidden = true;
   controls.hidden = true;
   panel(
-    `<div class="brand">BLACK<b>HOUSE</b></div><div class="eyebrow">An occult survival roguelite</div><h1>REVENANT<br><em>LOOP</em></h1><p class="tagline">Every five seconds,<br>your past becomes your ally.</p><div class="sigil" aria-hidden="true">⟁</div><div id="weapons">${(Object.keys(WEAPONS) as Weapon[]).map((w) => `<button class="weapon ${selected === w ? "selected" : ""}" data-weapon="${w}" ${save.unlocked.includes(w) ? "" : "disabled"}><strong>${WEAPONS[w].name}</strong><small>${save.unlocked.includes(w) ? WEAPONS[w].desc : w === "blade" ? "Unlock: complete your first run" : "Unlock: reach wave 4"}</small></button>`).join("")}</div><button class="primary" id="start">ENTER THE LOOP</button><div class="row"><button class="secondary" id="how">HOW TO PLAY</button><button class="secondary" id="settings">SETTINGS</button></div><div class="muted">BEST ${save.highScore.toLocaleString()} · ${save.wins} CYCLES BROKEN</div><div class="footer">BLACKHOUSE · ORIGINAL BROWSER GAME · BUILD 0.8</div>`,
+    `<div class="brand">BLACK<b>HOUSE</b></div><div class="eyebrow">An occult survival roguelite</div><h1>REVENANT<br><em>LOOP</em></h1><p class="tagline">Every five seconds,<br>your past becomes your ally.</p><div class="sigil" aria-hidden="true">⟁</div><div id="weapons">${(Object.keys(WEAPONS) as Weapon[]).map((w) => `<button class="weapon ${selected === w ? "selected" : ""}" data-weapon="${w}" ${save.unlocked.includes(w) ? "" : "disabled"}><strong>${WEAPONS[w].name}</strong><small>${save.unlocked.includes(w) ? WEAPONS[w].desc : w === "blade" ? "Unlock: complete your first run" : "Unlock: reach wave 4"}</small></button>`).join("")}</div><button class="primary" id="start">ENTER THE LOOP</button><div class="row"><button class="secondary" id="how">HOW TO PLAY</button><button class="secondary" id="settings">SETTINGS</button></div><div class="muted">BEST ${save.highScore.toLocaleString()} · ${save.wins} CYCLES BROKEN</div><div class="footer">BLACKHOUSE · ORIGINAL BROWSER GAME · BUILD 1.0</div>`,
   );
   document.querySelectorAll<HTMLButtonElement>("[data-weapon]").forEach(
     (b) =>
@@ -331,8 +331,12 @@ echo.addEventListener("pointerdown", (e) => {
   doEcho();
 });
 window.addEventListener("keydown", (e) => {
-  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key))
+  if (
+    screen === "game" &&
+    ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)
+  )
     e.preventDefault();
+  if (screen !== "game" && screen !== "pause") return;
   keys.add(e.key.toLowerCase());
   if (!e.repeat && e.code === "Space") doEcho();
   if (!e.repeat && (e.key === "Escape" || e.key.toLowerCase() === "p")) pause();

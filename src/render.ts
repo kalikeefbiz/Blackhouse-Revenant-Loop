@@ -69,7 +69,7 @@ export class Renderer {
     // Recorded route makes the tactical geometry visible.
     if (g.recorder.frames.length > 1) {
       c.strokeStyle = "#74cabe";
-      c.globalAlpha = 0.12;
+      c.globalAlpha = 0.22;
       c.lineWidth = 2;
       c.beginPath();
       g.recorder.frames.forEach((f, i) =>
@@ -83,6 +83,19 @@ export class Renderer {
         c.globalAlpha = 0.35 + 0.2 * Math.sin(t * 18);
         if (e.kind === "brute" || e.kind === "boss") {
           this.circle(e, e.kind === "boss" ? 80 : 65, "#ff698c", false);
+          if (e.kind === "boss") {
+            for (let i = -1; i <= 1; i++) {
+              const angle = e.angle + i * 0.22;
+              this.line(
+                e.x,
+                e.y,
+                e.x + Math.cos(angle) * 180,
+                e.y + Math.sin(angle) * 180,
+                "#ff9cb6",
+                2,
+              );
+            }
+          }
           if (e.kind === "brute") {
             c.globalAlpha = 0.1;
             this.circle(e, 65, "#ff698c");

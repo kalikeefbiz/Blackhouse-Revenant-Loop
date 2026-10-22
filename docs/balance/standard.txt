@@ -1,0 +1,22 @@
+
+> revenant-loop@1.0.0 balance
+> tsx scripts/balance.ts
+
+{"weapon":"bolt","seed":17,"state":"won","time":452,"wave":10,"kills":481,"hp":100,"echoKills":108,"damageTaken":70,"levels":{"size":1,"armor":1,"heal":1,"haste":2,"multi":2,"power":1,"cooldown":1}}
+{"weapon":"bolt","seed":42,"state":"lost","time":378,"wave":8,"kills":324,"hp":0,"echoKills":53,"damageTaken":166,"levels":{"heal":2,"power":1,"haste":2,"armor":1,"size":1}}
+{"weapon":"bolt","seed":91,"state":"won","time":514,"wave":10,"kills":546,"hp":54,"echoKills":121,"damageTaken":169,"levels":{"multi":2,"heal":2,"frost":1,"power":1,"revenge":2,"haste":1}}
+{"weapon":"bolt","seed":7,"state":"lost","time":330,"wave":7,"kills":266,"hp":0,"echoKills":31,"damageTaken":140,"levels":{"armor":3,"haste":1,"revenge":1,"power":1}}
+{"weapon":"bolt","seed":123,"state":"lost","time":225,"wave":5,"kills":171,"hp":0,"echoKills":21,"damageTaken":145,"levels":{"power":2,"heal":1,"health":1}}
+{"weapon":"bolt","seed":2026,"state":"won","time":468,"wave":10,"kills":433,"hp":37,"echoKills":103,"damageTaken":124,"levels":{"multi":3,"power":3,"health":1,"frost":1,"heal":1}}
+{"weapon":"blade","seed":17,"state":"lost","time":495,"wave":10,"kills":520,"hp":0,"echoKills":163,"damageTaken":185,"levels":{"haste":1,"echoPower":2,"health":1,"frost":1,"heal":1,"size":1,"multi":1,"power":1}}
+{"weapon":"blade","seed":42,"state":"won","time":487,"wave":10,"kills":395,"hp":9,"echoKills":38,"damageTaken":91,"levels":{"armor":4,"multi":2,"power":2,"haste":1}}
+{"weapon":"blade","seed":91,"state":"lost","time":516,"wave":10,"kills":455,"hp":0,"echoKills":112,"damageTaken":227,"levels":{"echoPower":1,"multi":2,"heal":3,"health":1,"armor":2}}
+{"weapon":"blade","seed":7,"state":"won","time":472,"wave":10,"kills":421,"hp":118,"echoKills":66,"damageTaken":34,"levels":{"multi":2,"haste":1,"armor":2,"health":1,"size":1,"heal":1,"power":1}}
+{"weapon":"blade","seed":123,"state":"won","time":500,"wave":10,"kills":581,"hp":29,"echoKills":102,"damageTaken":212,"levels":{"armor":2,"health":1,"haste":2,"heal":2,"multi":1,"power":1}}
+{"weapon":"blade","seed":2026,"state":"won","time":455,"wave":10,"kills":436,"hp":27,"echoKills":67,"damageTaken":118,"levels":{"power":3,"heal":1,"multi":2,"revenge":1,"armor":1,"size":1}}
+{"weapon":"lance","seed":17,"state":"won","time":480,"wave":10,"kills":501,"hp":150,"echoKills":112,"damageTaken":199,"levels":{"heal":3,"size":1,"multi":1,"health":2,"power":1,"haste":1}}
+{"weapon":"lance","seed":42,"state":"won","time":447,"wave":10,"kills":449,"hp":86,"echoKills":129,"damageTaken":97,"levels":{"multi":2,"echoPower":2,"heal":1,"power":1,"revenge":1,"haste":2}}
+{"weapon":"lance","seed":91,"state":"won","time":458,"wave":10,"kills":441,"hp":76,"echoKills":87,"damageTaken":74,"levels":{"haste":1,"power":2,"multi":2,"heal":2,"armor":1,"echoPower":1}}
+{"weapon":"lance","seed":7,"state":"won","time":475,"wave":10,"kills":470,"hp":100,"echoKills":137,"damageTaken":139,"levels":{"power":1,"multi":2,"heal":1,"armor":2,"health":1,"echoPower":2}}
+{"weapon":"lance","seed":123,"state":"won","time":449,"wave":10,"kills":474,"hp":72,"echoKills":109,"damageTaken":55,"levels":{"power":3,"multi":3,"heal":2,"echoPower":1}}
+{"weapon":"lance","seed":2026,"state":"lost","time":242,"wave":5,"kills":167,"hp":0,"echoKills":31,"damageTaken":217,"levels":{"heal":2,"health":1,"frost":1}}

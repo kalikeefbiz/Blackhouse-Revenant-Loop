@@ -1,6 +1,8 @@
 import { Game, type Weapon } from "../src/game";
 for (const weapon of ["bolt", "blade", "lance"] as Weapon[])
-  for (const seed of [17, 42, 91]) {
+  for (const seed of process.env.EXTENDED
+    ? [17, 42, 91, 7, 123, 2026]
+    : [17, 42, 91]) {
     const g = new Game(weapon, seed);
     let steps = 0;
     const damageTaken: number[] = [];
@@ -28,6 +30,10 @@ for (const weapon of ["bolt", "blade", "lance"] as Weapon[])
           "speed",
           "nova",
         ];
+        if (process.env.BUILD === "echo")
+          priority.unshift("nova", "cooldown", "echoPower");
+        if (process.env.BUILD === "defense")
+          priority.unshift("armor", "health", "frost", "rest");
         const choice = [...g.choices].sort(
           (a, b) => priority.indexOf(a.id) - priority.indexOf(b.id),
         )[0];

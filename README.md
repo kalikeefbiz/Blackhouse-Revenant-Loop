@@ -2,7 +2,7 @@
 
 **Every five seconds, your past becomes your ally.**
 
-A complete, mobile-first supernatural action roguelite for BlackHouse. Build pass 1 (v0.8.0): playable from tutorial through victory, with original procedural graphics and synthesized sound. No accounts, remote services, downloaded asset packs, or runtime dependencies.
+A complete, mobile-first supernatural action roguelite for BlackHouse. Release v1.0.0: playable from tutorial through victory, with original procedural graphics and synthesized sound. No accounts, remote services, downloaded asset packs, or runtime dependencies.
 
 ## Play / develop
 
@@ -25,11 +25,12 @@ npm test              # deterministic mechanics and save tests
 npx playwright install --with-deps chromium webkit
 npm run test:e2e      # mobile Chromium, mobile WebKit, desktop Chromium
 npm run balance      # nine seeded reactive-bot runs; not human playtesting
+EXTENDED=1 npm run balance # six seeds per weapon; BUILD=echo or defense for varied boons
 npm run format:check
 npm run preview
 ```
 
-Serve **the contents of `dist/`** from any static HTTPS host. No server, API keys, SPA routes or special rewrites are needed. For subdirectory hosting, build with `npm run build -- --base=./` (or set Vite's base). No deployment to blackhouse.fun is configured or performed. Browser storage is origin-specific; changing hosts does not migrate progress.
+Serve **the contents of `dist/`** from any static HTTPS host. No server, API keys, SPA routes or special rewrites are needed. Relative asset paths are the default, including for subdirectory hosting. No deployment to blackhouse.fun is configured or performed. Browser storage is origin-specific; changing hosts does not migrate progress.
 
 ## Content
 
@@ -61,6 +62,10 @@ The optional `?test` bridge exists **only in Vite development builds**. It lets 
 
 The `blackhouse.revenant.v1` localStorage entry stores unlocks, high score, run/win counts, best wave, Echo milestone count, tutorial completion and settings. An active run is not resumed after reload. Corrupt/blocked storage falls back safely; failed writes display a notice. No tracking or analytics. Sound begins only after user input; silent mode remains fully playable.
 
-## Final pass scope
+## Release verification
 
-See [verification notes](docs/VERIFICATION.md). Remaining work is extended polish, wider regression, real iPhone Safari ergonomics/audio/performance checks, and final hosting/deployment validation. Core gameplay, all content, assets, systems, and both endings are implemented. Crownfall Arena and the BlackHouse production site were not touched.
+See [verification notes](docs/VERIFICATION.md). The release passes 23 unit regressions and the mobile Chromium, mobile WebKit and desktop Chromium browser checks. Production smoke is reproducible with `npm run preview` then `npm run test:smoke`; set `SMOKE_URL` to check a deployed URL. Physical iPhone performance, audio, safe-area ergonomics and thermal behavior remain UNVERIFIED. Core gameplay, all content, assets, systems, and both endings are implemented. Crownfall Arena and the BlackHouse production site were not touched.
+
+## Hosting
+
+The dedicated Cloudflare Pages project configuration is recorded in `deploy/pages.json`: only this repository, production branch `main`, Node 22, `npm ci && npm run build`, output `dist`. No custom domain is configured. Public URL verification is recorded in `docs/VERIFICATION.md`. HTML revalidates; content-hashed assets cache immutably via `public/_headers`.

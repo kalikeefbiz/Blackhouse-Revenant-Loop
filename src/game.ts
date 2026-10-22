@@ -472,13 +472,14 @@ export class Game {
     this.player.vy = ((this.player.y - source.y) / d) * 170;
     this.onEvent("hurt");
     this.effect(this.player, "ring", "#ff607e", 35);
-    if (this.level("revenge"))
-      this.blast(this.player, 120, 30 * this.level("revenge"));
     if (this.player.hp <= 0) {
       this.player.hp = 0;
       this.state = "lost";
       this.onEvent("lost");
+      return;
     }
+    if (this.level("revenge"))
+      this.blast(this.player, 120, 30 * this.level("revenge"));
   }
   enemyShot(e: Vec, angle: number, speed = 120, damage = 12) {
     this.shots.push({

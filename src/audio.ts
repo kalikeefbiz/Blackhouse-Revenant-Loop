@@ -3,6 +3,7 @@ export class Sound {
   enabled = true;
   master: GainNode | null = null;
   drone: OscillatorNode | null = null;
+  lastPlayed = new Map<string, number>();
   unlock() {
     try {
       if (!this.ctx) {
@@ -19,7 +20,7 @@ export class Sound {
         g.connect(this.master);
         this.drone.start();
       }
-      void this.ctx.resume();
+      void this.ctx.resume().catch(() => {});
     } catch {
       /* Silent mode remains playable. */
     }
@@ -34,10 +35,13 @@ export class Sound {
       );
   }
   suspend() {
-    void this.ctx?.suspend();
+    void this.ctx?.suspend().catch(() => {});
   }
   play(name: string) {
     if (!this.enabled || !this.ctx || !this.master) return;
+    const now = this.ctx.currentTime;
+    if (now - (this.lastPlayed.get(name) ?? -1) < 0.045) return;
+    this.lastPlayed.set(name, now);
     const map: Record<string, number[]> = {
       bolt: [580, 220, 0.09],
       blade: [150, 65, 0.16],
@@ -60,7 +64,10 @@ export class Sound {
     o.type = ["hurt", "blade", "boss"].includes(name) ? "sawtooth" : "sine";
     o.frequency.setValueAtTime(f, t);
     o.frequency.exponentialRampToValueAtTime(end, t + d);
-    g.gain.setValueAtTime(name === "tell" ? 0.1 : 0.35, t);
+    g.gain.setValueAtTime(
+      name === "tell" ? 0.2 : name === "kill" ? 0.14 : 0.3,
+      t,
+    );
     g.gain.exponentialRampToValueAtTime(0.001, t + d);
     o.connect(g);
     g.connect(this.master);

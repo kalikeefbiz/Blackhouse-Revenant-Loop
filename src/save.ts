@@ -25,11 +25,11 @@ export const defaults = (): Save => ({
   shake: true,
   quality: "auto",
 });
-export function readSave(
-  storage: Pick<Storage, "getItem"> = localStorage,
-): Save {
+export function readSave(storage?: Pick<Storage, "getItem">): Save {
   try {
-    const raw = JSON.parse(storage.getItem("blackhouse.revenant.v1") || "null");
+    const raw = JSON.parse(
+      (storage ?? localStorage).getItem("blackhouse.revenant.v1") || "null",
+    );
     if (!raw || raw.version !== 1) return defaults();
     const s = defaults();
     for (const k of [
@@ -54,12 +54,12 @@ export function readSave(
     return defaults();
   }
 }
-export function writeSave(
-  s: Save,
-  storage: Pick<Storage, "setItem"> = localStorage,
-) {
+export function writeSave(s: Save, storage?: Pick<Storage, "setItem">) {
   try {
-    storage.setItem("blackhouse.revenant.v1", JSON.stringify(s));
+    (storage ?? localStorage).setItem(
+      "blackhouse.revenant.v1",
+      JSON.stringify(s),
+    );
     return true;
   } catch {
     return false;

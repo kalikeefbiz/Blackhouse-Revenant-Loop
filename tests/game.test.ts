@@ -283,3 +283,48 @@ it("does not offer redundant Echo cooldown ranks", () => {
   }
   expect(g.echoCooldown).toBe(2.6);
 });
+
+it("survives a browser that denies the localStorage property itself", () => {
+  Object.defineProperty(globalThis, "localStorage", {
+    configurable: true,
+    get() {
+      throw new Error("SecurityError");
+    },
+  });
+  try {
+    expect(readSave()).toEqual(defaults());
+    expect(writeSave(defaults())).toBe(false);
+  } finally {
+    Reflect.deleteProperty(globalThis, "localStorage");
+  }
+});
+
+it("lethal damage cannot trigger both victory and defeat through retaliation", () => {
+  const g = new Game();
+  const events: string[] = [];
+  g.onEvent = (name) => events.push(name);
+  g.apply("revenge");
+  const boss = g.spawn("boss", g.player.x + 60, g.player.y);
+  boss.hp = 1;
+  g.damagePlayer(1000, boss);
+  expect(g.state).toBe("lost");
+  expect(events.filter((name) => name === "won" || name === "lost")).toEqual([
+    "lost",
+  ]);
+});
+it.each(["bolt", "blade", "lance"] as Weapon[])(
+  "standing still with automatic Echo cannot win with %s",
+  (weapon) => {
+    const g = new Game(weapon, 42);
+    for (
+      let i = 0;
+      i < 60 * 650 && g.state !== "lost" && g.state !== "won";
+      i++
+    ) {
+      if (g.state === "upgrade") g.choose(g.choices[0].id);
+      if (g.ready) g.summon();
+      g.update(1 / 60, { x: 0, y: 0 });
+    }
+    expect(g.state).toBe("lost");
+  },
+);

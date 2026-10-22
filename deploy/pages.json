@@ -1,0 +1,30 @@
+{
+  "name": "blackhouse-revenant-loop",
+  "production_branch": "main",
+  "build_config": {
+    "build_command": "npm ci && npm run build",
+    "destination_dir": "dist",
+    "root_dir": "/"
+  },
+  "source": {
+    "type": "github",
+    "config": {
+      "owner": "kalikeefbiz",
+      "owner_id": "334712446",
+      "repo_name": "Blackhouse-Revenant-Loop",
+      "repo_id": "1429210667",
+      "production_branch": "main",
+      "production_deployments_enabled": true,
+      "preview_deployment_setting": "none",
+      "pr_comments_enabled": false
+    }
+  },
+  "deployment_configs": {
+    "production": {
+      "env_vars": { "NODE_VERSION": { "type": "plain_text", "value": "22" } }
+    },
+    "preview": {
+      "env_vars": { "NODE_VERSION": { "type": "plain_text", "value": "22" } }
+    }
+  }
+}
