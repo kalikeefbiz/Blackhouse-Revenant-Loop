@@ -1,4 +1,4 @@
-import { chromium, webkit, devices } from "playwright";
+import { chromium, webkit, devices, expect } from "@playwright/test";
 import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
 const url = process.env.SMOKE_URL || "http://127.0.0.1:4173/";
@@ -35,6 +35,10 @@ for (const [name, engine] of [
   await page.getByText("03 · Call your past").waitFor();
   await page.locator("#echo").tap();
   await page.getByText("03 · Call your past").waitFor({ state: "detached" });
+  await expect(page.locator("#echo")).toContainText(/3\.[0-2]s/);
+  await expect(page.locator("#echo")).toContainText("READY");
+  await page.locator("#echo").tap();
+  await expect(page.locator("#echo")).toContainText("2 / 2 ACTIVE");
   await page.keyboard.down("a");
   await page.waitForTimeout(600);
   await page.keyboard.up("a");

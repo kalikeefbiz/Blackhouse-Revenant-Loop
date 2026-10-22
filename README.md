@@ -4,7 +4,7 @@
 
 **Play:** https://blackhouse-revenant-loop.pages.dev/
 
-A complete, mobile-first supernatural action roguelite for BlackHouse. Release v1.0.0: playable from tutorial through victory, with original procedural graphics and synthesized sound. No accounts, remote services, downloaded asset packs, or runtime dependencies.
+A complete, mobile-first supernatural action roguelite for BlackHouse. Release v1.0.1: playable from tutorial through victory, with original procedural graphics and synthesized sound. No accounts, remote services, downloaded asset packs, or runtime dependencies.
 
 ## Play / develop
 
@@ -36,7 +36,7 @@ Serve **the contents of `dist/`** from any static HTTPS host. No server, API key
 
 ## Content
 
-- **Temporal Echo:** five seconds of recorded movement and attack events; replayed world positions, attack directions, weapon parameters, and timing. Echo damage begins at 65% and can be upgraded. Duration is five seconds. Base cooldown is 5.2 seconds; Fractured Hour can reduce it to 2.6 seconds. Up to two active Echoes; no AI-driven replay or simulation rewind. Enemies can be distracted by nearby ghosts.
+- **Temporal Echo:** five seconds of recorded movement and attack events; replayed world positions, attack directions, weapon parameters, and timing. Echo damage begins at 65% and can be upgraded. Duration is five seconds. Base cooldown is 3.2 seconds; four Fractured Hour ranks each reduce it by 0.25 seconds, reaching 2.2 seconds. Up to two active Echoes; no AI-driven replay or simulation rewind. Enemies can be distracted by nearby ghosts.
 - **Spectral Bolt:** rapid single-target projectiles; extra projectiles create a fan. **Crescent Blade:** broad close-range sweep with multi-target damage. **Void Lance:** slower piercing projectiles for lined-up enemies. Bolt starts unlocked; finishing a run unlocks Blade, reaching wave four unlocks Lance.
 - **Six enemies:** pursuing Husks, telegraphed charging Hounds, ranged Archers, armored Brutes with delayed area slams, weaving Wraiths, and add-spawning Summoners. Summoners stop producing adds at wave cleanup.
 - **Three chapters:** Ashen Cloister, Violet Ossuary, Crimson Eclipse. Each has a different palette and procedural architecture. Nine escalating randomized waves lead to the Hollow Sovereign, whose phases increase projectile density and attack frequency and summon reinforcements.

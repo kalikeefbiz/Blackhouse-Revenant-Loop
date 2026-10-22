@@ -141,3 +141,27 @@ test("simultaneous touch movement and echo retains joystick pointer", async ({
   });
   await page.screenshot({ path: "test-results/mobile-combat.png" });
 });
+
+test("natural Echo overlap updates cooldown and active HUD", async ({
+  page,
+}) => {
+  await page.goto("/?test");
+  await page.evaluate(() => {
+    const api = (window as any).__revenant;
+    api.start(false);
+    api.game.spawnTimer = 999;
+  });
+  const echo = page.locator("#echo");
+  await expect(echo).toContainText("RECORDING");
+  await expect(echo).toContainText("READY", { timeout: 10000 });
+  await echo.dispatchEvent("pointerdown", { pointerId: 2 });
+  await expect(echo).toContainText("1 / 2 ACTIVE");
+  await expect(echo).toContainText(/3\.[0-2]s/);
+  await expect(echo).toContainText("READY", { timeout: 4500 });
+  await echo.dispatchEvent("pointerdown", { pointerId: 3 });
+  await expect(echo).toContainText("2 / 2 ACTIVE");
+  await expect
+    .poll(() => page.evaluate(() => (window as any).__revenant.game.echoUses))
+    .toBe(2);
+  await expect(echo).toContainText("1 / 2 ACTIVE", { timeout: 2500 });
+});

@@ -134,7 +134,7 @@ export const UPGRADES = [
   {
     id: "cooldown",
     name: "Fractured Hour",
-    desc: "Echo cooldown −0.7s (minimum 2.6s).",
+    desc: "Echo cooldown −0.25s (minimum 2.2s).",
     tag: "ECHO",
   },
   {
@@ -309,13 +309,14 @@ export class Game {
     return 140 * (1 + 0.12 * this.level("speed"));
   }
   get echoCooldown() {
-    return Math.max(2.6, 5.2 - 0.7 * this.level("cooldown"));
+    return Math.max(2.2, 3.2 - 0.25 * this.level("cooldown"));
   }
   get waveDuration() {
     return 44 + (this.wave % 3) * 2;
   }
   get ready() {
     return (
+      this.echoes.length < 2 &&
       this.cooldown <= 0 &&
       this.recorder.frames.length > 0 &&
       this.time - this.recorder.frames[0].t >= 4.9

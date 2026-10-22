@@ -62,16 +62,69 @@ describe("temporal memory", () => {
     advance(g, 4);
     expect(g.echoes).toHaveLength(0);
   });
-  it("enforces cooldown and two active echo maximum", () => {
+  it.each([0, 1, 2, 3, 4])(
+    "naturally overlaps independent replays at cooldown rank %s",
+    (rank) => {
+      const g = new Game();
+      g.spawnTimer = 999;
+      g.levels.cooldown = rank;
+      expect(g.echoCooldown).toBe(3.2 - rank * 0.25);
+      advance(g, 5.1, { x: 0.1, y: 0 });
+      // Record an attack in both overlapping windows, preserving its world position.
+      g.recorder.attack({
+        t: g.time - 0.1,
+        x: 200,
+        y: 200,
+        angle: 0,
+        weapon: "lance",
+        damage: 100,
+        size: 1,
+        count: 1,
+      });
+      expect(g.summon()).toBe(true);
+      const first = g.echoes[0];
+      expect(g.summon()).toBe(false);
+      advance(g, g.echoCooldown - 0.05, { x: -0.1, y: 0 });
+      expect(g.summon()).toBe(false);
+      advance(g, 0.1, { x: -0.1, y: 0 });
+      expect(g.summon()).toBe(true);
+      const second = g.echoes[1];
+      expect(first.frames).not.toBe(second.frames);
+      expect(first.attacks).not.toBe(second.attacks);
+      expect(first.age).toBeGreaterThan(second.age);
+      expect(first.x).not.toBe(second.x);
+      expect(g.echoes).toHaveLength(2);
+      expect(g.summon()).toBe(false);
+      const replayed: number[] = [];
+      const attack = g.attack.bind(g);
+      g.attack = (a, echo) => {
+        if (echo) replayed.push(a.x);
+        attack(a, echo);
+      };
+      advance(g, 5 - first.age - 0.05);
+      expect(g.echoes).toHaveLength(2);
+      expect(first.index).toBe(1);
+      advance(g, 0.1);
+      expect(g.echoes).toEqual([second]);
+      advance(g, 5 - second.age + 0.05);
+      expect(g.echoes).toHaveLength(0);
+      expect(second.index).toBe(1);
+      expect(replayed).toEqual([200, 200]);
+    },
+  );
+  it("blocks a third Echo even when the upgraded cooldown is ready", () => {
     const g = new Game();
     g.spawnTimer = 999;
+    g.levels.cooldown = 4;
     advance(g, 5.1);
     expect(g.summon()).toBe(true);
-    expect(g.summon()).toBe(false);
-    g.cooldown = 0;
+    advance(g, 2.25);
     expect(g.summon()).toBe(true);
-    g.cooldown = 0;
+    advance(g, 2.25);
+    expect(g.cooldown).toBe(0);
+    expect(g.ready).toBe(false);
     expect(g.summon()).toBe(false);
+    expect(g.echoes).toHaveLength(2);
   });
 });
 describe("combat and progression", () => {
@@ -281,7 +334,7 @@ it("does not offer redundant Echo cooldown ranks", () => {
     g.between();
     expect(g.choices.some((u) => u.id === "cooldown")).toBe(false);
   }
-  expect(g.echoCooldown).toBe(2.6);
+  expect(g.echoCooldown).toBe(2.2);
 });
 
 it("survives a browser that denies the localStorage property itself", () => {
