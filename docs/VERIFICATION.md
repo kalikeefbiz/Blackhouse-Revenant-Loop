@@ -1,3 +1,5 @@
+Current release: [v1.0.2 single-Echo recast verification](VERIFICATION-v1.0.2.md).
+
 # v1.0 release verification — 2026-10-22
 
 Baseline: `1a95d38` (v0.8.0). Canvas/TypeScript + Vite retained. No changes to Crownfall Arena or blackhouse.fun.

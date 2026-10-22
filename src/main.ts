@@ -69,7 +69,7 @@ function menu() {
   hud.hidden = true;
   controls.hidden = true;
   panel(
-    `<div class="brand">BLACK<b>HOUSE</b></div><div class="eyebrow">An occult survival roguelite</div><h1>REVENANT<br><em>LOOP</em></h1><p class="tagline">Every five seconds,<br>your past becomes your ally.</p><div class="sigil" aria-hidden="true">⟁</div><div id="weapons">${(Object.keys(WEAPONS) as Weapon[]).map((w) => `<button class="weapon ${selected === w ? "selected" : ""}" data-weapon="${w}" ${save.unlocked.includes(w) ? "" : "disabled"}><strong>${WEAPONS[w].name}</strong><small>${save.unlocked.includes(w) ? WEAPONS[w].desc : w === "blade" ? "Unlock: complete your first run" : "Unlock: reach wave 4"}</small></button>`).join("")}</div><button class="primary" id="start">ENTER THE LOOP</button><div class="row"><button class="secondary" id="how">HOW TO PLAY</button><button class="secondary" id="settings">SETTINGS</button></div><div class="muted">BEST ${save.highScore.toLocaleString()} · ${save.wins} CYCLES BROKEN</div><div class="footer">BLACKHOUSE · ORIGINAL BROWSER GAME · BUILD 1.0.1</div>`,
+    `<div class="brand">BLACK<b>HOUSE</b></div><div class="eyebrow">An occult survival roguelite</div><h1>REVENANT<br><em>LOOP</em></h1><p class="tagline">Every five seconds,<br>your past becomes your ally.</p><div class="sigil" aria-hidden="true">⟁</div><div id="weapons">${(Object.keys(WEAPONS) as Weapon[]).map((w) => `<button class="weapon ${selected === w ? "selected" : ""}" data-weapon="${w}" ${save.unlocked.includes(w) ? "" : "disabled"}><strong>${WEAPONS[w].name}</strong><small>${save.unlocked.includes(w) ? WEAPONS[w].desc : w === "blade" ? "Unlock: complete your first run" : "Unlock: reach wave 4"}</small></button>`).join("")}</div><button class="primary" id="start">ENTER THE LOOP</button><div class="row"><button class="secondary" id="how">HOW TO PLAY</button><button class="secondary" id="settings">SETTINGS</button></div><div class="muted">BEST ${save.highScore.toLocaleString()} · ${save.wins} CYCLES BROKEN</div><div class="footer">BLACKHOUSE · ORIGINAL BROWSER GAME · BUILD 1.0.2</div>`,
   );
   document.querySelectorAll<HTMLButtonElement>("[data-weapon]").forEach(
     (b) =>
@@ -84,7 +84,7 @@ function menu() {
 }
 function help() {
   panel(
-    `<div class="eyebrow">The revenant’s covenant</div><h2>Fight beside your past.</h2><p>Move with <b>WASD / arrows</b> or the left thumbstick. Your weapon attacks the nearest enemy automatically.</p><p>After five seconds, press <b>Space / ECHO</b>. A ghost repeats your exact last five seconds of movement and attacks, dealing real damage.</p><p>Move around the arena before summoning to create crossfire. Up to <b>two Echoes</b> can coexist naturally. Echo cooldown is 3.2 seconds; Fractured Hour reduces it to 2.2 seconds. Red lines and rings warn of enemy attacks.</p><p>Survive nine waves, choose a boon after each, and defeat the three-phase Hollow Sovereign. A run lasts about 7–10 minutes.</p><button class="primary" id="learn">PLAY INTERACTIVE TUTORIAL</button><button class="secondary" id="back">BACK</button>`,
+    `<div class="eyebrow">The revenant’s covenant</div><h2>Fight beside your past.</h2><p>Move with <b>WASD / arrows</b> or the left thumbstick. Your weapon attacks the nearest enemy automatically.</p><p>After five seconds, press <b>Space / ECHO</b>. A ghost repeats your exact last five seconds of movement and attacks, dealing real damage.</p><p>Move around the arena before summoning to create crossfire. <b>One Echo</b> fights beside you for five seconds. Recast to replace it with your newest five-second memory and refresh its lifespan. Echo cooldown is 3.2 seconds; Fractured Hour reduces it to 2.2 seconds. Red lines and rings warn of enemy attacks.</p><p>Survive nine waves, choose a boon after each, and defeat the three-phase Hollow Sovereign. A run lasts about 7–10 minutes.</p><button class="primary" id="learn">PLAY INTERACTIVE TUTORIAL</button><button class="secondary" id="back">BACK</button>`,
   );
   bind("learn", () => start(true));
   bind("back", menu);
@@ -116,7 +116,7 @@ function showTutorial() {
       '<div class="tutorial"><strong>02 · Leave a memory</strong><p>Your weapon attacks automatically. Keep moving while five seconds are recorded.</p></div>';
   if (tutorial === 3)
     overlay.innerHTML =
-      '<div class="tutorial"><strong>03 · Call your past</strong><p>Tap ECHO or press Space. Your ghost repeats your path and attacks.</p></div>';
+      '<div class="tutorial"><strong>03 · Call your past</strong><p>Tap ECHO or press Space. Your ghost repeats your path and attacks for five seconds. Recast when ready to replace it with a fresh memory.</p></div>';
 }
 function doEcho() {
   if (paused || !game) return;
@@ -132,6 +132,16 @@ function doEcho() {
 }
 function event(name: string) {
   sound.play(name);
+  if (name === "recast") {
+    notify("ECHO RECAST · Memory renewed");
+    echo.animate(
+      [
+        { boxShadow: "0 0 32px #a6ffef", transform: "scale(1.08)" },
+        { transform: "scale(1)" },
+      ],
+      { duration: 400 },
+    );
+  }
   if (name === "hurt" && save.shake) renderer.shake = 5;
   if (name === "phase") {
     notify(
@@ -295,7 +305,7 @@ function renderHUD() {
       `${Math.max(0, (boss.hp / boss.max) * 100)}%`;
   }
   echo.classList.toggle("unready", !g.ready);
-  echo.innerHTML = `ECHO<small>${g.ready ? "READY" : g.cooldown > 0 ? g.cooldown.toFixed(1) + "s" : g.echoes.length >= 2 ? "FULL" : "RECORDING"}</small><small>${g.echoes.length} / 2 ACTIVE</small>`;
+  echo.innerHTML = `ECHO<small>${g.ready ? "READY" : g.cooldown > 0 ? g.cooldown.toFixed(1) + "s" : "RECORDING"}</small><small>${g.echoes[0] ? "ACTIVE · " + Math.max(0, 5 - g.echoes[0].age).toFixed(1) + "s" : "NO ECHO"}</small>`;
 }
 function pointerMove(e: PointerEvent) {
   if (e.pointerId !== stickId) return;

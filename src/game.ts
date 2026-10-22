@@ -316,21 +316,22 @@ export class Game {
   }
   get ready() {
     return (
-      this.echoes.length < 2 &&
       this.cooldown <= 0 &&
       this.recorder.frames.length > 0 &&
       this.time - this.recorder.frames[0].t >= 4.9
     );
   }
   summon() {
-    if (this.state !== "playing" || !this.ready || this.echoes.length >= 2)
-      return false;
+    if (this.state !== "playing" || !this.ready) return false;
     const e = this.recorder.snapshot(this.time);
     if (!e) return false;
-    this.echoes.push(e);
+    const previous = this.echoes[0];
+    this.echoes = [e];
+    if (previous) this.effect(previous, "ring", "#be93ff", 55);
+    this.effect(e, "ring", "#e0fff3", 70);
     this.cooldown = this.echoCooldown;
     this.echoUses++;
-    this.onEvent("echo");
+    this.onEvent(previous ? "recast" : "echo");
     this.effect(this.player, "ring", "#83fff5", 85);
     if (this.level("nova"))
       this.blast(this.player, 110, 35 * this.level("nova"));

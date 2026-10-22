@@ -4,7 +4,7 @@
 
 **Play:** https://blackhouse-revenant-loop.pages.dev/
 
-A complete, mobile-first supernatural action roguelite for BlackHouse. Release v1.0.1: playable from tutorial through victory, with original procedural graphics and synthesized sound. No accounts, remote services, downloaded asset packs, or runtime dependencies.
+A complete, mobile-first supernatural action roguelite for BlackHouse. Release v1.0.2: playable from tutorial through victory, with original procedural graphics and synthesized sound. No accounts, remote services, downloaded asset packs, or runtime dependencies.
 
 ## Play / develop
 
@@ -32,11 +32,11 @@ npm run format:check
 npm run preview
 ```
 
-Serve **the contents of `dist/`** from any static HTTPS host. No server, API keys, SPA routes or special rewrites are needed. Relative asset paths are the default, including for subdirectory hosting. No deployment to blackhouse.fun is configured or performed. Browser storage is origin-specific; changing hosts does not migrate progress.
+Serve **the contents of `dist/`** from any static HTTPS host. No server, API keys, SPA routes or special rewrites are needed. Relative asset paths are the default, including for subdirectory hosting. BlackHouse Games links to the dedicated live game. Browser storage is origin-specific; changing hosts does not migrate progress.
 
 ## Content
 
-- **Temporal Echo:** five seconds of recorded movement and attack events; replayed world positions, attack directions, weapon parameters, and timing. Echo damage begins at 65% and can be upgraded. Duration is five seconds. Base cooldown is 3.2 seconds; four Fractured Hour ranks each reduce it by 0.25 seconds, reaching 2.2 seconds. Up to two active Echoes; no AI-driven replay or simulation rewind. Enemies can be distracted by nearby ghosts.
+- **Temporal Echo:** five seconds of recorded movement and attack events; replayed world positions, attack directions, weapon parameters, and timing. Echo damage begins at 65% and can be upgraded. Duration is five seconds. Base cooldown is 3.2 seconds; four Fractured Hour ranks each reduce it by 0.25 seconds, reaching 2.2 seconds. Exactly one active Echo; recasting replaces it with the newest five-second recording and resets its five-second lifespan; no AI-driven replay or simulation rewind. Enemies can be distracted by nearby ghosts.
 - **Spectral Bolt:** rapid single-target projectiles; extra projectiles create a fan. **Crescent Blade:** broad close-range sweep with multi-target damage. **Void Lance:** slower piercing projectiles for lined-up enemies. Bolt starts unlocked; finishing a run unlocks Blade, reaching wave four unlocks Lance.
 - **Six enemies:** pursuing Husks, telegraphed charging Hounds, ranged Archers, armored Brutes with delayed area slams, weaving Wraiths, and add-spawning Summoners. Summoners stop producing adds at wave cleanup.
 - **Three chapters:** Ashen Cloister, Violet Ossuary, Crimson Eclipse. Each has a different palette and procedural architecture. Nine escalating randomized waves lead to the Hollow Sovereign, whose phases increase projectile density and attack frequency and summon reinforcements.
@@ -66,7 +66,7 @@ The `blackhouse.revenant.v1` localStorage entry stores unlocks, high score, run/
 
 ## Release verification
 
-See [verification notes](docs/VERIFICATION.md). The release passes 23 unit regressions and the mobile Chromium, mobile WebKit and desktop Chromium browser checks. Production smoke is reproducible with `npm run preview` then `npm run test:smoke`; set `SMOKE_URL` to check a deployed URL. Physical iPhone performance, audio, safe-area ergonomics and thermal behavior remain UNVERIFIED. Core gameplay, all content, assets, systems, and both endings are implemented. Crownfall Arena and the BlackHouse production site were not touched.
+See [verification notes](docs/VERIFICATION.md). The release passes the unit regressions and the mobile Chromium, mobile WebKit and desktop Chromium browser checks. Production smoke is reproducible with `npm run preview` then `npm run test:smoke`; set `SMOKE_URL` to check a deployed URL. Physical iPhone performance, audio, safe-area ergonomics and thermal behavior remain UNVERIFIED. Core gameplay, all content, assets, systems, and both endings are implemented. Enemy difficulty, weapons, waves and upgrade balance are unchanged in v1.0.2.
 
 ## Hosting
 

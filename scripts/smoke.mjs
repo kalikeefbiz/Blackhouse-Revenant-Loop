@@ -38,7 +38,8 @@ for (const [name, engine] of [
   await expect(page.locator("#echo")).toContainText(/3\.[0-2]s/);
   await expect(page.locator("#echo")).toContainText("READY");
   await page.locator("#echo").tap();
-  await expect(page.locator("#echo")).toContainText("2 / 2 ACTIVE");
+  await expect(page.locator("#echo")).toContainText(/ACTIVE · [45]\.[0-9]s/);
+  await expect(page.getByText("ECHO RECAST · Memory renewed")).toBeVisible();
   await page.keyboard.down("a");
   await page.waitForTimeout(600);
   await page.keyboard.up("a");

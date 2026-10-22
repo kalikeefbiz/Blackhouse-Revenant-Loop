@@ -63,14 +63,20 @@ describe("temporal memory", () => {
     expect(g.echoes).toHaveLength(0);
   });
   it.each([0, 1, 2, 3, 4])(
-    "naturally overlaps independent replays at cooldown rank %s",
+    "recasts a single fresh memory at cooldown rank %s",
     (rank) => {
       const g = new Game();
       g.spawnTimer = 999;
       g.levels.cooldown = rank;
       expect(g.echoCooldown).toBe(3.2 - rank * 0.25);
       advance(g, 5.1, { x: 0.1, y: 0 });
-      // Record an attack in both overlapping windows, preserving its world position.
+      expect(g.summon()).toBe(true);
+      const first = g.echoes[0];
+      expect(g.summon()).toBe(false);
+      advance(g, g.echoCooldown - 0.05, { x: -0.1, y: 0 });
+      expect(g.summon()).toBe(false);
+      expect(g.echoes[0]).toBe(first);
+      advance(g, 0.1, { x: -0.1, y: 0 });
       g.recorder.attack({
         t: g.time - 0.1,
         x: 200,
@@ -82,49 +88,63 @@ describe("temporal memory", () => {
         count: 1,
       });
       expect(g.summon()).toBe(true);
-      const first = g.echoes[0];
-      expect(g.summon()).toBe(false);
-      advance(g, g.echoCooldown - 0.05, { x: -0.1, y: 0 });
-      expect(g.summon()).toBe(false);
-      advance(g, 0.1, { x: -0.1, y: 0 });
-      expect(g.summon()).toBe(true);
-      const second = g.echoes[1];
-      expect(first.frames).not.toBe(second.frames);
-      expect(first.attacks).not.toBe(second.attacks);
-      expect(first.age).toBeGreaterThan(second.age);
-      expect(first.x).not.toBe(second.x);
-      expect(g.echoes).toHaveLength(2);
-      expect(g.summon()).toBe(false);
+      const fresh = g.echoes[0];
+      expect(g.echoes).toHaveLength(1);
+      expect(fresh).not.toBe(first);
+      expect(fresh.age).toBe(0);
+      expect(fresh.index).toBe(0);
+      expect(fresh.frames).not.toBe(first.frames);
+      expect(fresh.x).not.toBe(first.x);
+      expect(fresh.attacks.at(-1)).toMatchObject({ x: 200, damage: 100 });
+      expect(g.cooldown).toBe(g.echoCooldown);
       const replayed: number[] = [];
       const attack = g.attack.bind(g);
       g.attack = (a, echo) => {
         if (echo) replayed.push(a.x);
         attack(a, echo);
       };
-      advance(g, 5 - first.age - 0.05);
-      expect(g.echoes).toHaveLength(2);
-      expect(first.index).toBe(1);
+      advance(g, 4.95);
+      expect(g.echoes).toEqual([fresh]);
+      expect(replayed).toContain(200);
       advance(g, 0.1);
-      expect(g.echoes).toEqual([second]);
-      advance(g, 5 - second.age + 0.05);
       expect(g.echoes).toHaveLength(0);
-      expect(second.index).toBe(1);
-      expect(replayed).toEqual([200, 200]);
     },
   );
-  it("blocks a third Echo even when the upgraded cooldown is ready", () => {
+  it("recasts retain arrival damage, cues and existing projectiles", () => {
+    const events: string[] = [];
+    const g = new Game();
+    g.onEvent = (name) => events.push(name);
+    g.spawnTimer = 999;
+    g.levels.nova = 1;
+    advance(g, 5.1);
+    g.summon();
+    advance(g, 3.25);
+    const enemy = g.spawn("brute", g.player.x + 30, g.player.y);
+    enemy.speed = 0;
+    const hp = enemy.hp;
+    const shots = [...g.shots];
+    expect(g.summon()).toBe(true);
+    expect(enemy.hp).toBe(hp - 35);
+    expect(events).toContain("echo");
+    expect(events).toContain("recast");
+    expect(g.fx.filter((f) => f.type === "ring").length).toBeGreaterThanOrEqual(
+      4,
+    );
+    for (const shot of shots) expect(g.shots).toContain(shot);
+  });
+  it("enforces one Echo across repeated upgraded recasts", () => {
     const g = new Game();
     g.spawnTimer = 999;
     g.levels.cooldown = 4;
     advance(g, 5.1);
-    expect(g.summon()).toBe(true);
-    advance(g, 2.25);
-    expect(g.summon()).toBe(true);
-    advance(g, 2.25);
-    expect(g.cooldown).toBe(0);
-    expect(g.ready).toBe(false);
-    expect(g.summon()).toBe(false);
-    expect(g.echoes).toHaveLength(2);
+    for (let i = 0; i < 8; i++) {
+      expect(g.ready).toBe(true);
+      expect(g.summon()).toBe(true);
+      expect(g.echoes).toHaveLength(1);
+      expect(g.echoes[0].age).toBe(0);
+      advance(g, 2.25);
+    }
+    expect(g.echoUses).toBe(8);
   });
 });
 describe("combat and progression", () => {
